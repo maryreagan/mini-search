@@ -1,40 +1,26 @@
+//DOM elements
 let input = document.querySelector("input");
 let listParent = document.querySelector("ul");
 let listItems = document.querySelectorAll("li");
-let db = "./db/api.json";
 let recipeView = document.querySelector(".recipe-view");
-/* 
-database structure
-[
-    {
-        "recipe": "Tomato Relish",
-        "ingredients": ["tomato", "onion", "garlic", "salt", "pepper", "olive oil", "balsamic vinegar", "basil", "parmesan cheese"],
-        "instructions": ["chop tomato", "chop onion", "chop and roast garlic", "mix all ingredients together"],
-        "tags": ["sauce", "condiment", "charcuterie"],
-        "image": "https://www.simplyrecipes.com/wp-content/uploads/2014/08/tomato-relish-horiz-a-1600.jpg"
-    },
-    {
-        "recipe": "Chipotle Honey Dip",
-        "ingredients": ["chipotle peppers in adobo sauce", "honey", "goat cheese", "salt", "pepper", "cream cheese"],
-        "instructions": ["chop chipotle peppers", "mix all ingredients together"],
-        "tags": ["sauce", "condiment", "charcuterie"],
-        "image": "https://www.simplyrecipes.com/wp-content/uploads/2014/08/chipotle-honey-dip-horiz-a-1600.jpg"
-    }
-
-
-]
-*/
+//Database
+let db = "./db/api.json";
+//Arrays for search and sort
 let allRecipes = [];
 let recipes = [];
 let ingredients = [];
 let tags = [];
- async function readDB() {
+let foundRecipes = [];
+let foundIngredients = [];
+let foundTags = [];
+
+//Read database and populate arrays
+async function readDB() {
     await fetch(db)
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
             allRecipes = data;
-            console.log(allRecipes)
             data.forEach((element) => {
                 if (!recipes.includes(element.recipe)) {
                     recipes.push(element.recipe);
@@ -52,22 +38,19 @@ let tags = [];
             });
         })
 
-        .catch((error) => console.log(error))
+        .catch((error) => console.log(error));
 }
 readDB();
-let foundRecipes = [];
-let foundIngredients = [];
-let foundTags = [];
-console.log(recipes);
+
 //search database for related words on each keyup, results should change the displayed list
 input.addEventListener("keyup", (event) => {
-    if(document.querySelector(".recipe-container")){
+    //remove displayed recipes on search if it exists
+    if (document.querySelector(".recipe-container")) {
         document.querySelector(".recipe-container").remove();
     }
-    console.log(event.target.value);
     let search = event.target.value.toUpperCase();
-    console.log(search);
     //search database for related words
+    //if statement important to prevent everything from being displayed when input is empty
     if (search !== "") {
         foundRecipes = recipes.filter((element) =>
             element.toUpperCase().includes(search)
@@ -78,14 +61,16 @@ input.addEventListener("keyup", (event) => {
         foundTags = tags.filter((element) =>
             element.toUpperCase().includes(search)
         );
-        //display results
         displayResults();
     } else {
+        //if input is empty, remove all children from listParent(search results)
         while (listParent.firstChild) {
             listParent.removeChild(listParent.firstChild);
         }
     }
 });
+
+//Displays search results and add correct tag(recipe name, ingredient, or tag) to each result
 function displayResults() {
     //remove all children from listParent
     while (listParent.firstChild) {
@@ -118,13 +103,16 @@ function displayResults() {
     });
     listItems = document.querySelectorAll("li");
 
+    //On search result click, display all relevant recipes
     listItems.forEach((element) => {
         element.addEventListener("click", (event) => {
             while (listParent.firstChild) {
                 listParent.removeChild(listParent.firstChild);
             }
+            //create container for easy deletion and more styling
             let recipeContainer = document.createElement("div");
             recipeContainer.classList.add("recipe-container");
+            //get type of search result
             let type = event.target.lastChild.innerHTML;
             //remove span element
             element.lastChild.remove();
@@ -143,6 +131,8 @@ function displayResults() {
                     element.tags.includes(event.target.innerHTML)
                 );
             }
+
+            //display each recipe
             recipes.forEach((recipe) => {
                 //create element and display recipe name
                 let recipeName = document.createElement("h2");
@@ -170,7 +160,7 @@ function displayResults() {
                 recipe.instructions.forEach((element, index) => {
                     let instruction = document.createElement("p");
                     instruction.classList.add("instruction");
-                    instruction.textContent = `Step ${index + 1}: ${element}`
+                    instruction.textContent = `Step ${index + 1}: ${element}`;
                     recipeInstructions.appendChild(instruction);
                 });
                 recipeContainer.appendChild(recipeInstructions);
@@ -185,7 +175,7 @@ function displayResults() {
                 });
                 recipeContainer.appendChild(recipeTags);
                 recipeView.appendChild(recipeContainer);
-            })
-        })
-    })
+            });
+        });
+    });
 }
