@@ -4,13 +4,13 @@
         "ingredients": ["tomato", "onion", "garlic", "salt", "pepper", "olive oil", "balsamic vinegar", "basil", "parmesan cheese"],
         "instructions": ["chop tomato", "chop onion", "chop and roast garlic", "mix all ingredients together"],
         "tags": ["sauce", "condiment", "charcuterie"],
-        "image": "https://www.simplyrecipes.com/wp-content/uploads/2014/08/tomato-relish-horiz-a-1600.jpg"
+        "image": "https://www.asouthernsoul.com/wp-content/uploads/2021/06/IMG_0004-4.jpg"
     },
     {
         "recipe": "Chipotle Honey Dip",
         "ingredients": ["chipotle peppers in adobo sauce", "honey", "goat cheese", "salt", "pepper", "cream cheese"],
         "instructions": ["chop chipotle peppers", "mix all ingredients together"],
         "tags": ["sauce", "condiment", "charcuterie"],
-        "image": "https://www.simplyrecipes.com/wp-content/uploads/2014/08/chipotle-honey-dip-horiz-a-1600.jpg"
+        "image": "https://realhousemoms.com/wp-content/uploads/2015/04/horizontal.jpg"
     }
 ]
